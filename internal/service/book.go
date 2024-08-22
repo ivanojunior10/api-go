@@ -44,3 +44,27 @@ func (s*BookService) getBooks() ([]Book, error){
 	}
 	return books, nil
 }
+func (s *BookService) GetBookByID(id int) (*Book, error) {
+	query := "select id, title, author, genre from books where id = ?"
+	row:= s.db.QueryRow(query, id)
+	
+	var book Book
+	err := row.Scan(&book.ID, &book.Title, &book.Author, &book.Genre)
+	if err != nil {
+		return nil, err 
+	}
+	return &book, nil
+}
+
+func (s *BookService) UpdateBook(book *Book) error{
+	query := "update books set title=?, author?, genre=?, where id=?"
+	result, err := s.db.Exec(query, book.Title, book.Author, book.Genre, book.ID)
+	return err
+
+}
+
+func (s *BookService) DeleteBook(id int) error {
+	query := "delete from books whre id?"
+	_, err := s.db.Exec(query, id)
+	return err
+}
