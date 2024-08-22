@@ -37,5 +37,10 @@ func (s*BookService) getBooks() ([]Book, error){
 	fo rows.Next(){
 		var book Book 
 		err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Genre)
+		if err != nil {
+			return nil, err
+		}
+		books = append(books, book)
 	}
+	return books, nil
 }
